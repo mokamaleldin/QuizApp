@@ -1,30 +1,34 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from 'react';
 
-// timeout: هي الزمن المحدد للمؤقت بالمللي ثانية.
-// onTimeout: هي دالة يتم استدعاؤها عندما ينتهي الوقت.
-const QuestionTimer = ({ timeout, onTimeout }) => {
-    const [remainingTime, setRemaingingTime] = useState(timeout)
+export default function QuestionTimer({ timeout, onTimeout, mode }) {
+    const [remainingTime, setRemainingTime] = useState(timeout);
 
     useEffect(() => {
-        const timer = setTimeout(onTimeout, timeout)
+        console.log('SETTING TIMEOUT');
+        const timer = setTimeout(onTimeout, timeout);
 
         return () => {
-            clearTimeout(timer)
-        }
-    }, [timeout, onTimeout])
+            clearTimeout(timer);
+        };
+    }, [timeout, onTimeout]);
 
     useEffect(() => {
+        console.log('SETTING INTERVAL');
         const interval = setInterval(() => {
-            setRemaingingTime(prevRemining => prevRemining - 100)
-        }, 100)
+            setRemainingTime((prevRemainingTime) => prevRemainingTime - 100);
+        }, 100);
 
         return () => {
-            clearInterval(interval)
-        }
-    }, [])
+            clearInterval(interval);
+        };
+    }, []);
 
     return (
-        <progress id="question-timer" value={ remainingTime } max={ timeout } />
-    )
+        <progress
+            id="question-time"
+            max={ timeout }
+            value={ remainingTime }
+            className={ mode }
+        />
+    );
 }
-export default QuestionTimer

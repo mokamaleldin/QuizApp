@@ -1,38 +1,47 @@
-import { useRef } from "react";
+import { useRef } from 'react';
 
-const Answers = ({ answers, slectedAnswer, answerState, onSelect }) => {
+export default function Answers({
+    answers,
+    selectedAnswer,
+    answerState,
+    onSelect,
+}) {
     const shuffledAnswers = useRef();
-
-    // Shuffle the answers so they are not always in the same order
 
     if (!shuffledAnswers.current) {
         shuffledAnswers.current = [...answers];
         shuffledAnswers.current.sort(() => Math.random() - 0.5);
     }
+
     return (
         <ul id="answers">
-            { shuffledAnswers.current.map(answer => {
-                const isSelected = slectedAnswer === answer;
-                let cssClasses = '';
-                if (answerState === 'answerd' && isSelected) {
-                    cssClasses = 'selected';
+            { shuffledAnswers.current.map((answer) => {
+                const isSelected = selectedAnswer === answer;
+                let cssClass = '';
+
+                if (answerState === 'answered' && isSelected) {
+                    cssClass = 'selected';
                 }
-                if ((answerState === 'correct' || answerState === 'worng') && isSelected) {
-                    cssClasses = answerState;
+
+                if (
+                    (answerState === 'correct' || answerState === 'wrong') &&
+                    isSelected
+                ) {
+                    cssClass = answerState;
                 }
 
                 return (
-                    <li className="answer" key={ answer }>
+                    <li key={ answer } className="answer">
                         <button
-                            className={ cssClasses }
                             onClick={ () => onSelect(answer) }
+                            className={ cssClass }
+                            disabled={ answerState !== '' }
                         >
                             { answer }
                         </button>
                     </li>
-                )
+                );
             }) }
         </ul>
-    )
+    );
 }
-export default Answers
